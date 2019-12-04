@@ -1,31 +1,29 @@
 {
   "version": "1.0.0",
-  "name": "Connector template",
+  "name": "Enedis Api Connector",
   "type": "konnector",
   "language": "node",
   "icon": "icon.png",
-  "slug": "template",
+  "slug": "enedis-api-konnector",
   "source": "git@github.com:konnectors/template.git",
-  "editor": "Cozy",
-  "vendor_link": "Link to the target website",
-  "categories": ["other"],
+  "editor": "Grand Lyon",
+  "vendor_link": "www.grandlyon.com",
+  "categories": ["energy"],
+  "frequency": "daily",
   "fields": {
-    "login": {
-      "type": "text"
+    "access_token": {
+      "type": "hidden"
     },
-    "password": {
-      "type": "password"
-    },
-    "advancedFields": {
-      "folderPath": {
-        "advanced": true,
-        "isRequired": false
-      }
+    "refresh_token": {
+      "type": "hidden"
     }
   },
-  "data_types": [
-    "bill"
-  ],
+  "oauth": {
+    "scope": [
+      "https://www.googleapis.com/auth/contacts+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile"
+    ]
+  },
+  "data_types": [],
   "screenshots": [],
   "permissions": {
     "accounts": {
@@ -34,8 +32,7 @@
     },
     "enedis data": {
       "type": "io.enedis.day"
-    },
-
+    }
   },
   "developer": {
     "name": "Cozy Cloud",
@@ -43,18 +40,14 @@
   },
   "langs": ["fr", "en"],
   "locales": {
-    "fr": {
-      "short_description": "Récupère la liste de livres",
-      "long_description": "Récupère la liste de livre sur le site exemple",
+      "short_description": "Courbe de charge depuis le site Enedis",
+      "long_description": "Ce connecteur récupère la courbe de charge électrique enregistrée par le compteur Linky",
       "permissions": {
-        "bank operations": {
-          "description": "Utilisé pour relier les factures à des operations bancaires"
-        },
-        "bills": {
-          "description": "Utilisé pour sauver les données des factures"
+        "load profile": {
+          "description": "La courbe de charge électrique enregistrée par le compteur Linky"
         },
         "files": {
-          "description": "Utilisé pour sauvegarder les factures"
+          "description": "Nécessaire (à voir pourquoi)"
         },
         "accounts": {
           "description": "Utilisé pour obtenir les données du compte"
@@ -62,24 +55,19 @@
       }
     },
     "en": {
-      "short_description": "Fetch a list of books",
-      "long_description": "Fetch a list of books from the example website",
+      "short_description": "Load profile from Enedis website",
+      "long_description": "This connector fetches the electrical load profile recorded by the Linky electricity meter",
       "permissions": {
-        "bank operations": {
-          "description": "Required to link bank operations to bills"
-        },
-        "bills": {
-          "description": "Required to save the bills data"
+        "load profile": {
+          "description": "The load profile recorded by Linky"
         },
         "files": {
-          "description": "Required to save the bills"
+          "description": "Required (why ?)"
         },
         "accounts": {
           "description": "Required to get the account's data"
         }
-      }
     }
   },
-  "banksTransactionRegExp": "\\bbooks\\b",
   "manifest_version": "2"
 }

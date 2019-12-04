@@ -18,46 +18,40 @@ const startDate = moment()
   .format('YYYY-MM-DD')
 const endDate = moment().format('YYYY-MM-DD')
 
-const request = requestFactory({
-  // The debug mode shows all the details about HTTP requests and responses. Very useful for
-  // debugging but very verbose. This is why it is commented out by default
-  // debug: true,
-  // Activates [cheerio](https://cheerio.js.org/) parsing on each page
-  cheerio: true,
-  // If cheerio is activated do not forget to deactivate json parsing (which is activated by
-  // default in cozy-konnector-libs
-  json: false,
-  // This allows request-promise to keep cookies between requests
-  jar: true
-})
+// const request = requestFactory({
+//   // The debug mode shows all the details about HTTP requests and responses. Very useful for
+//   // debugging but very verbose. This is why it is commented out by default
+//   // debug: true,
+//   // Activates [cheerio](https://cheerio.js.org/) parsing on each page
+//   cheerio: true,
+//   // If cheerio is activated do not forget to deactivate json parsing (which is activated by
+//   // default in cozy-konnector-libs
+//   json: false,
+//   // This allows request-promise to keep cookies between requests
+//   jar: true
+// })
 
-const VENDOR = 'template'
 const baseUrl = 'https://gw.hml.api.enedis.fr'
-
-module.exports = new BaseKonnector(start)
 
 // The start function is run by the BaseKonnector instance only when it got all the account
 // information (fields). When you run this connector yourself in "standalone" mode or "dev" mode,
 // the account information come from ./konnector-dev-config.json file
 // cozyParameters are static parameters, independents from the account. Most often, it can be a
 // secret api key.
-async function start(fields, cozyParameters) {
-  log('info', 'Authenticating ...')
-  console.log(fields.access_token)
-  // if (cozyParameters) log('debug', 'Found COZY_PARAMETERS')
-  // await authenticate(fields.login, fields.password)
-  // log('info', 'Successfully logged in')
-  // The BaseKonnector instance expects a Promise as return of the function
-  log('info', 'Fetching the list of documents')
-  const $ = await getData(fields.access_token)
-  // cheerio (https://cheerio.js.org/) uses the same api as jQuery (http://jquery.com/)
-  log('info', 'Parsing list of documents')
-  const documents = await parseDocuments($)
+async function start(fields) {
+  try {
+    const { access_token } = fields
+    console.log(access_token)
+    log('info', 'Fetching enedis data')
+    const $ = await getData(access_token)
+    log('info', 'Parsing data')
+    const documents = await parseDocuments($)
+    log('info', 'Saving data to Cozy')
+    storeData(documents)
+  } catch (err) {
+    log('error', err.message)
+  }
 
-  // Here we use the saveBills function even if what we fetch are not bills,
-  // but this is the most common case in connectors
-  log('info', 'Saving data to Cozy')
-  storeData(documents)
   // await saveBills(documents, fields, {
   //   // This is a bank identifier which will be used to link bills to bank operations. These
   //   // identifiers should be at least a word found in the title of a bank operation related to this
@@ -70,32 +64,6 @@ async function start(fields, cozyParameters) {
 
 // This shows authentication using the [signin function](https://github.com/konnectors/libs/blob/master/packages/cozy-konnector-libs/docs/api.md#module_signin)
 // even if this in another domain here, but it works as an example
-function authenticate(username, password) {
-  return signin({
-    url: `http://quotes.toscrape.com/login`,
-    formSelector: 'form',
-    formData: { username, password },
-    // The validate function will check if the login request was a success. Every website has a
-    // different way to respond: HTTP status code, error message in HTML ($), HTTP redirection
-    // (fullResponse.request.uri.href)...
-    validate: (statusCode, $, fullResponse) => {
-      log(
-        'debug',
-        fullResponse.request.uri.href,
-        'not used here but should be useful for other connectors'
-      )
-      // The login in toscrape.com always works except when no password is set
-      if ($(`a[href='/logout']`).length === 1) {
-        return true
-      } else {
-        // cozy-konnector-libs has its own logging function which format these logs with colors in
-        // standalone and dev mode and as JSON in production mode
-        log('error', $('.error').text())
-        return false
-      }
-    }
-  })
-}
 
 async function getData(token) {
   var usagePointID = 32320647321714
@@ -123,8 +91,10 @@ async function getData(token) {
 }
 
 function storeData(data) {
-  console.log(data)
-  return hydrateAndFilter(data, 'io.enedis.day', {
+  data = JSON.parse(data)
+  var dataToStore = data.usage_point[0].meter_reading.interval_reading
+  console.log(dataToStore)
+  return hydrateAndFilter(dataToStore, 'io.enedis.day', {
     keys: ['rank']
   }).then(filteredDocuments => {
     addData(filteredDocuments, 'io.enedis.day')
@@ -140,3 +110,5 @@ function parseDocuments($) {
   log($)
   return $
 }
+
+module.exports = new BaseKonnector(start)
