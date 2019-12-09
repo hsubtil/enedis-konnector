@@ -1,0 +1,75 @@
+{
+  "version": "1.0.0",
+  "name": "Enedis Api Connector",
+  "type": "konnector",
+  "language": "node",
+  "icon": "icon.png",
+  "slug": "enedis-api-konnector",
+  "source": "git@github.com:konnectors/template.git",
+  "editor": "Grand Lyon",
+  "vendor_link": "www.grandlyon.com",
+  "categories": ["energy"],
+  "frequency": "daily",
+  "fields": {
+    "access_token": {
+      "type": "hidden"
+    },
+    "refresh_token": {
+      "type": "hidden"
+    }
+  },
+ "oauth": {
+    "account_type": "enedis",
+    "scope": "/v3/customers/usage_points/addresses.GET /v3/customers/usage_points/contracts.GET /v3/customers.GET /v3/metering_data/daily_consumption.GET /v3/metering_data/consumption_max_power.GET /v3/customers/contact_data.GET /v3/metering_data/consumption_load_curve.GET /v3/customers/identity.GET"
+  },
+  "data_types": [],
+  "screenshots": [],
+  "permissions": {
+    "accounts": {
+      "type": "io.cozy.accounts",
+      "verbs": ["GET"]
+    },
+    "files": {
+      "type": "io.cozy.files"
+    },
+    "enedis data": {
+      "type": "io.enedis.day"
+    }
+  },
+  "developer": {
+    "name": "Cozy Cloud",
+    "url": "https://cozy.io"
+  },
+  "langs": ["fr", "en"],
+  "locales": {
+      "short_description": "Courbe de charge depuis le site Enedis",
+      "long_description": "Ce connecteur récupère la courbe de charge électrique enregistrée par le compteur Linky",
+      "permissions": {
+        "load profile": {
+          "description": "La courbe de charge électrique enregistrée par le compteur Linky"
+        },
+        "files": {
+          "description": "Nécessaire (à voir pourquoi)"
+        },
+        "accounts": {
+          "description": "Utilisé pour obtenir les données du compte"
+        }
+      }
+    },
+    "en": {
+      "short_description": "Load profile from Enedis website",
+      "long_description": "This connector fetches the electrical load profile recorded by the Linky electricity meter",
+      "permissions": {
+        "load profile": {
+          "description": "The load profile recorded by Linky"
+        },
+        "files": {
+          "description": "Required (why ?)"
+        },
+        "accounts": {
+          "description": "Required to get the account's data"
+        }
+    }
+  },
+  "manifest_version": "2"
+}
