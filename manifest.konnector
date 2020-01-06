@@ -18,9 +18,10 @@
       "type": "hidden"
     }
   },
- "oauth": {
-    "account_type": "enedis",
-    "scope": "/v3/customers/usage_points/addresses.GET /v3/customers/usage_points/contracts.GET /v3/customers.GET /v3/metering_data/daily_consumption.GET /v3/metering_data/consumption_max_power.GET /v3/customers/contact_data.GET /v3/metering_data/consumption_load_curve.GET /v3/customers/identity.GET"
+  "oauth": {
+    "scope": [
+      "https://www.googleapis.com/auth/contacts+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile"
+    ]
   },
   "data_types": [],
   "screenshots": [],
@@ -28,9 +29,6 @@
     "accounts": {
       "type": "io.cozy.accounts",
       "verbs": ["GET"]
-    },
-    "files": {
-      "type": "io.cozy.files"
     },
     "enedis data": {
       "type": "io.enedis.day"

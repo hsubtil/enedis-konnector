@@ -1,5 +1,5 @@
 {
-  "name": "enedis-api-connector",
+  "name": "cozy-konnector-enedis",
   "version": "1.0.0",
   "description": "",
   "repository": {
@@ -33,18 +33,18 @@
     "clean": "rm -rf ./data",
     "build": "webpack",
     "lint": "eslint --fix .",
-    "deploy": "git-directory-deploy --directory build/ --branch ${DEPLOY_BRANCH:-build} --repo=${DEPLOY_REPOSITORY:-git@github.com:konnectors/template.git}",
+    "deploy": "git-directory-deploy --directory build/ --branch ${DEPLOY_BRANCH:-build} --repo=${DEPLOY_REPOSITORY:-git@github.com:hsubtil/enedis-konnector.git}",
     "cozyPublish": "cozy-app-publish --token $REGISTRY_TOKEN --build-commit $(git rev-parse ${DEPLOY_BRANCH:-build})",
     "travisDeployKey": "./bin/generate_travis_deploy_key"
   },
   "dependencies": {
     "core-util-is": "^1.0.2",
-    "cozy-konnector-libs": "^4.32.1"
+    "cozy-konnector-libs": "4.32.0"
   },
   "devDependencies": {
     "copy-webpack-plugin": "5.0.5",
     "cozy-app-publish": "0.20.0",
-    "cozy-jobs-cli": "^1.10.5",
+    "cozy-jobs-cli": "1.10.4",
     "eslint-config-cozy-app": "1.3.3",
     "git-directory-deploy": "1.5.1",
     "husky": "3.1.0",
