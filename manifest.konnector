@@ -5,7 +5,7 @@
   "language": "node",
   "icon": "icon.png",
   "slug": "enedis-api-konnector",
-  "source": "git@github.com:konnectors/template.git",
+  "source": "git@github.com:hsubtil/enedis-konnector.git",
   "editor": "Grand Lyon",
   "vendor_link": "www.grandlyon.com",
   "categories": ["energy"],
@@ -18,11 +18,7 @@
       "type": "hidden"
     }
   },
-  "oauth": {
-    "scope": [
-      "https://www.googleapis.com/auth/contacts+https://www.googleapis.com/auth/userinfo.email+https://www.googleapis.com/auth/userinfo.profile"
-    ]
-  },
+  "oauth": {},
   "data_types": [],
   "screenshots": [],
   "permissions": {
